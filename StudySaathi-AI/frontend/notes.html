@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes to Questions - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .upload-zone {
+      border: 2px dashed var(--border-highlight);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+    .upload-zone:hover {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: var(--primary);
+    }
+    .question-block {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .mcq-option-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 10px 14px;
+      margin-top: 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-glass);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .mcq-option-btn:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h1>StudySaathi</h1>
+          <p>Local AI Companion</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner" class="nav-item">
+          <span class="icon">🗓️</span>
+          <span>Study Planner</span>
+        </a>
+        <a href="/buddy" class="nav-item">
+          <span class="icon">🤖</span>
+          <span>AI Study Buddy</span>
+        </a>
+        <a href="/quiz" class="nav-item">
+          <span class="icon">🧠</span>
+          <span>Adaptive Quiz</span>
+        </a>
+        <a href="/flashcards" class="nav-item">
+          <span class="icon">🃏</span>
+          <span>Flashcards Arena</span>
+        </a>
+        <a href="/code" class="nav-item">
+          <span class="icon">💻</span>
+          <span>Screen Code</span>
+        </a>
+        <a href="/games" class="nav-item">
+          <span class="icon">🎮</span>
+          <span>Brain Play Zone</span>
+        </a>
+        <a href="/notes" class="nav-item active">
+          <span class="icon">📄</span>
+          <span>Notes → Questions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <span id="ai-status-dot" class="status-dot"></span>
+            <span id="ai-status-text" style="font-weight:600;">Ollama Fast</span>
+          </span>
+          <span style="color:var(--text-dim); font-size:0.75rem;">100% Private</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="student-greeting">
+          <h2>📄 Notes & PDF → Question Synthesizer</h2>
+          <p>Extract core concepts from any PDF/notes and synthesize interactive exam questions</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="load-sample-notes-btn" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
+            📑 Load Decision Trees Sample
+          </button>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <div style="display: grid; grid-template-columns: 420px 1fr; gap: 24px;">
+          
+          <!-- UPLOAD / INPUT PANEL -->
+          <div>
+            <div class="glass-card" style="margin-bottom: 20px;">
+              <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Input Notes Material</h3>
+              
+              <!-- DROPZONE -->
+              <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <div style="font-size: 2.2rem; margin-bottom: 6px;">📂</div>
+                <div style="font-weight: 600; font-size: 0.95rem;">Click to upload PDF or TXT</div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 4px;">
+                  100% Private • Stored strictly on your laptop
+                </div>
+                <input type="file" id="file-input" style="display: none;" accept=".pdf,.txt,.md,.csv">
+              </div>
+
+              <div style="margin: 14px 0; text-align: center; color: var(--text-dim); font-size: 0.78rem; text-transform: uppercase;">
+                — or paste text directly —
+              </div>
+
+              <form id="notes-text-form">
+                <div style="margin-bottom: 12px;">
+                  <label style="display:block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">TOPIC NAME</label>
+                  <input type="text" id="topic-title" class="chat-input" value="Decision Trees & Entropy" style="width: 100%;" required>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                  <label style="display:block; font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px;">NOTES CONTENT</label>
+                  <textarea id="notes-content" class="chat-input" rows="8" style="width: 100%; resize: vertical;" placeholder="Paste text from school or college notes..." required>A Decision Tree splits data recursively into pure subsets. 
+ID3 uses Entropy and Information Gain. Entropy measures impurity: -sum(p * log2(p)).
+CART uses Gini Impurity: 1 - sum(p^2).
+Overfitting occurs when trees are too deep, mitigated by pre-pruning (max_depth) and post-pruning.
+Random Forests combine multiple decorrelated trees using bootstrap aggregation (bagging) and random feature subsets to reduce variance.</textarea>
+                </div>
+
+                <button type="submit" id="generate-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
+                  <span>⚡ Synthesize Exam Questions</span>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- GENERATED QUESTIONS PANEL -->
+          <div>
+            <div class="glass-card" id="results-panel">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div>
+                  <h3 id="generated-title" style="font-size: 1.2rem; font-weight: 700;">Synthesized Study Questions</h3>
+                  <p style="font-size: 0.82rem; color: var(--text-muted);">
+                    Directly extracted from your provided notes
+                  </p>
+                </div>
+                <a href="/quiz" class="btn btn-secondary" style="font-size: 0.78rem; padding: 5px 12px;">
+                  Quiz Arena 🧠
+                </a>
+              </div>
+
+              <div id="questions-content">
+                <div style="text-align: center; padding: 50px 20px; color: var(--text-muted);">
+                  <div style="font-size: 2.5rem; margin-bottom: 12px;">📝</div>
+                  <p>Upload a PDF or click <strong>Synthesize Exam Questions</strong> to generate custom MCQs, short questions, and 10-mark problems.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/notes.js"></script>
+</body>
+</html>

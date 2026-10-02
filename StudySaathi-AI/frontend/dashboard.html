@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Mermaid.js for visual diagram rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: false, theme: 'dark' });</script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h1>StudySaathi</h1>
+          <p>Local AI Companion</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-item active">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner" class="nav-item">
+          <span class="icon">🗓️</span>
+          <span>Study Planner</span>
+        </a>
+        <a href="/buddy" class="nav-item">
+          <span class="icon">🤖</span>
+          <span>AI Study Buddy</span>
+        </a>
+        <a href="/quiz" class="nav-item">
+          <span class="icon">🧠</span>
+          <span>Adaptive Quiz</span>
+        </a>
+        <a href="/flashcards" class="nav-item">
+          <span class="icon">🃏</span>
+          <span>Flashcards Arena</span>
+        </a>
+        <a href="/code" class="nav-item">
+          <span class="icon">💻</span>
+          <span>Screen Code</span>
+        </a>
+        <a href="/games" class="nav-item">
+          <span class="icon">🎮</span>
+          <span>Brain Play Zone</span>
+        </a>
+        <a href="/notes" class="nav-item">
+          <span class="icon">📄</span>
+          <span>Notes → Questions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <span id="ai-status-dot" class="status-dot"></span>
+            <span id="ai-status-text" style="font-weight:600;">Ollama Fast</span>
+          </span>
+          <span style="color:var(--text-dim); font-size:0.75rem;">100% Private</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="student-greeting">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <h2 id="greeting-title">Good morning, Meghana! 👋</h2>
+            <span id="student-badge" class="badge-level">🏛️ College (B.Tech)</span>
+          </div>
+          <p id="greeting-sub">State University of Technology • Target: 88%</p>
+        </div>
+
+        <div class="topbar-actions">
+          <!-- 4 VIBRANT COLORFUL THEMES SELECTOR -->
+          <div class="theme-palette" title="Change Background Mode">
+            <button class="theme-btn active" id="btn-theme-nebula" onclick="setAppTheme('nebula')">🌌 Nebula</button>
+            <button class="theme-btn" id="btn-theme-sunset" onclick="setAppTheme('sunset')">🌅 Sunset</button>
+            <button class="theme-btn" id="btn-theme-emerald" onclick="setAppTheme('emerald')">🌿 Emerald</button>
+            <button class="theme-btn" id="btn-theme-light" onclick="setAppTheme('light')">☀️ Daylight</button>
+          </div>
+
+          <!-- CONCENTRATION AUDIO & PLAY ZONE SHORTCUTS -->
+          <button class="btn btn-secondary" style="font-size:0.78rem; padding:6px 10px;" onclick="toggleAmbientFocusAudio()" title="Play calming focus sound">
+            🌧️ Focus Audio
+          </button>
+
+          <a href="/games" class="btn btn-secondary" style="font-size:0.78rem; padding:6px 10px; border-color:var(--accent); color:#f472b6;" title="Play quick brain puzzles when bored!">
+            🎮 Brain Play
+          </a>
+
+          <!-- STREAK PILL -->
+          <div class="badge-streak" id="streak-badge">
+            <span>🔥</span>
+            <span id="streak-text">7 Day Streak</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-body">
+        
+        <!-- ROW 1: CURRICULUM FILTERS & POMODORO -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-secondary active" id="filter-all" onclick="filterCategory('all', this)" style="font-size:0.8rem; padding:6px 14px;">
+              🌐 All Subjects
+            </button>
+            <button class="btn btn-secondary" id="filter-college" onclick="filterCategory('college', this)" style="font-size:0.8rem; padding:6px 14px;">
+              🏛️ College (ML, DBMS, AI)
+            </button>
+            <button class="btn btn-secondary" id="filter-school" onclick="filterCategory('school', this)" style="font-size:0.8rem; padding:6px 14px;">
+              🎒 School (Physics, Biology, Math)
+            </button>
+          </div>
+
+          <!-- POMODORO TIMER -->
+          <div style="display:flex; align-items:center; gap:10px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); padding:6px 14px; border-radius:999px; font-size:0.82rem;">
+            <span>⏱️ Focus Timer:</span>
+            <span id="timer-display" style="font-weight:700; color:#34d399;">25:00</span>
+            <button onclick="togglePomodoroTimer()" id="pomo-toggle-btn" style="background:transparent; border:none; color:white; cursor:pointer; font-size:0.9rem;">▶️</button>
+          </div>
+        </div>
+
+        <!-- ROW 2: 4 METRICS CARDS -->
+        <div class="grid-metrics">
+          <div class="glass-card metric-card">
+            <div class="metric-icon" style="background: rgba(245, 158, 11, 0.16); color: #fbbf24;">🔥</div>
+            <div class="metric-info">
+              <h4>Study Streak</h4>
+              <div class="value" id="val-streak">7 Days</div>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-icon" style="background: rgba(99, 102, 241, 0.16); color: #818cf8;">📚</div>
+            <div class="metric-info">
+              <h4>Topics Covered</h4>
+              <div class="value" id="val-topics">4 / 11</div>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-icon" style="background: rgba(6, 182, 212, 0.16); color: #22d3ee;">📈</div>
+            <div class="metric-info">
+              <h4>Overall Mastery</h4>
+              <div class="value" id="val-mastery">68.5%</div>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-icon" style="background: rgba(16, 185, 129, 0.16); color: #34d399;">🧠</div>
+            <div class="metric-info">
+              <h4>Quizzes Taken</h4>
+              <div class="value" id="val-quizzes">6 Tests</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 3: TODAY'S FOCUS & PRIORITY BANNER -->
+        <div class="priority-banner">
+          <div class="priority-left">
+            <span class="priority-badge" id="priority-badge">Today's Priority</span>
+            <div>
+              <div class="priority-title" id="priority-title">⚠️ Priority Review: Neural Networks & Backpropagation</div>
+              <div class="priority-desc" id="priority-desc">Current mastery is 40%. Target 30 mins active recall practice before moving to new units.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <a href="/quiz?topic=Neural%20Networks" class="btn btn-secondary" style="font-size:0.82rem;">
+              <span>🧪 Quick Quiz</span>
+            </a>
+            <a href="/buddy?topic=Neural%20Networks" class="btn btn-primary" id="priority-btn">
+              <span>🚀 Focus Session</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ROW 4: BALANCED 2-COLUMN BENTO GRID -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <!-- LEFT COLUMN: WEAK TOPIC DETECTOR -->
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700;">🔍 Diagnostic Knowledge Matrix</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Identifies conceptual gaps where score &lt; 60%</p>
+              </div>
+              <span class="badge-streak" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #f87171;">
+                Needs Action
+              </span>
+            </div>
+
+            <div id="weak-topics-list">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
+              <h4 style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 10px;">✅ Mastered Concepts (Safe Zone &ge; 75%)</h4>
+              <div id="strong-topics-list">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: ACTIVE STUDY PLAN -->
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 700;">🗓️ Active Study Schedule</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted);" id="plan-subject-sub">Curriculum Strategy (Learn • Practice • Quiz • Revise)</p>
+              </div>
+              <a href="/planner" class="btn btn-secondary" style="font-size: 0.78rem; padding: 5px 12px;">
+                Plan Config ⚙️
+              </a>
+            </div>
+
+            <div id="plan-days-list" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

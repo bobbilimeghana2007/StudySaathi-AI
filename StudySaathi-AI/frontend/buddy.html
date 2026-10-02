@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Study Buddy - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Mermaid.js for visual flowchart rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: false, theme: 'dark' });</script>
+  <style>
+    .prompt-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glass);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .prompt-chip:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h1>StudySaathi</h1>
+          <p>Local AI Companion</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner" class="nav-item">
+          <span class="icon">🗓️</span>
+          <span>Study Planner</span>
+        </a>
+        <a href="/buddy" class="nav-item active">
+          <span class="icon">🤖</span>
+          <span>AI Study Buddy</span>
+        </a>
+        <a href="/quiz" class="nav-item">
+          <span class="icon">🧠</span>
+          <span>Adaptive Quiz</span>
+        </a>
+        <a href="/flashcards" class="nav-item">
+          <span class="icon">🃏</span>
+          <span>Flashcards Arena</span>
+        </a>
+        <a href="/code" class="nav-item">
+          <span class="icon">💻</span>
+          <span>Screen Code</span>
+        </a>
+        <a href="/notes" class="nav-item">
+          <span class="icon">📄</span>
+          <span>Notes → Questions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <span id="ai-status-dot" class="status-dot"></span>
+            <span id="ai-status-text" style="font-weight:600;">Ollama Fast</span>
+          </span>
+          <span style="color:var(--text-dim); font-size:0.75rem;">100% Private</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT INTERFACE -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="student-greeting">
+          <h2>🤖 AI Study Buddy</h2>
+          <p>Explanations with Interactive Flowcharts, Voice Mode & Multilingual Tutoring</p>
+        </div>
+        <div class="topbar-actions">
+          <!-- ZOOM TOGGLE BUTTON -->
+          <button id="zoom-toggle-btn" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;" onclick="toggleZoomMode()">
+            <span id="zoom-icon">⛶</span> <span id="zoom-text">Zoom Panoramic</span>
+          </button>
+          
+          <button id="clear-chat-btn" class="btn btn-secondary" style="font-size: 0.8rem; padding: 6px 12px;">
+            🧹 Clear
+          </button>
+        </div>
+      </header>
+
+      <main class="content-body" style="padding-bottom: 20px;">
+        <div class="glass-card chat-container" id="chat-container-box">
+          
+          <!-- TOP CONTROLS: MODES & LANGUAGES -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+            <!-- PEDAGOGICAL MODES -->
+            <div class="mode-selector" style="margin-bottom:0;">
+              <button class="mode-pill active" data-mode="explain">💡 Explain (Beginner)</button>
+              <button class="mode-pill" data-mode="teach">🎓 Teach Step-by-Step</button>
+              <button class="mode-pill" data-mode="example">🌍 Real-World Example</button>
+              <button class="mode-pill" data-mode="exam">📝 Exam Mode (10-Marker)</button>
+              <button class="mode-pill" data-mode="revision">⚡ 5-Point Quick Revision</button>
+            </div>
+
+            <!-- LANGUAGE TOGGLE PILLS -->
+            <div class="lang-selector">
+              <span style="font-size:0.75rem; color:var(--text-dim); margin-right:4px;">Language:</span>
+              <button class="lang-pill active" id="chat-lang-en" onclick="setChatLanguage('en')">EN</button>
+              <button class="lang-pill" id="chat-lang-te" onclick="setChatLanguage('te')">తెలుగు</button>
+              <button class="lang-pill" id="chat-lang-hi" onclick="setChatLanguage('hi')">हिंदी</button>
+            </div>
+          </div>
+
+          <!-- MESSAGES CONTAINER -->
+          <div class="chat-messages" id="chat-messages">
+            <div class="message-bubble ai">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <strong>StudySaathi AI:</strong>
+                <button class="btn btn-secondary" style="font-size:0.72rem; padding:3px 8px;" onclick="speakText('Namaste! Welcome to StudySaathi AI. Ask me any concept in English, Telugu, or Hindi, and I will explain it with visual flowcharts!')">
+                  🔊 Listen
+                </button>
+              </div>
+              Namaste! 👋 I am your personal study companion. Choose a mode and language above.
+              I automatically generate **interactive visual flowcharts and diagrams** for your concepts!
+              
+              <div style="margin-top: 14px;">
+                <div style="font-size: 0.76rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;">
+                  Quick School & College Concepts:
+                </div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span class="prompt-chip" onclick="quickAsk('Decision Trees and Information Gain')">🌲 Decision Trees (ML)</span>
+                  <span class="prompt-chip" onclick="quickAsk('Neural Networks Backpropagation')">🧠 Neural Networks</span>
+                  <span class="prompt-chip" onclick="quickAsk('Light Dependent Reactions of Photosynthesis')">🍃 Photosynthesis (Biology)</span>
+                  <span class="prompt-chip" onclick="quickAsk('Newton Three Laws of Motion')">🚀 Newton's Laws (Physics)</span>
+                  <span class="prompt-chip" onclick="quickAsk('Quadratic Formula and Discriminant')">📐 Quadratic Equations</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INPUT BAR WITH VOICE MIC -->
+          <form id="chat-form" class="chat-input-bar">
+            <!-- VOICE MIC BUTTON -->
+            <button type="button" id="mic-btn" class="btn-mic" title="Click to speak (Voice Input)" onclick="toggleVoiceInput()">
+              🎙️
+            </button>
+
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ask about any concept, or click 🎙️ to speak in English / Telugu / Hindi..." autocomplete="off" required>
+            
+            <button type="submit" id="send-btn" class="btn btn-primary" style="padding: 0 22px;">
+              <span>Send 🚀</span>
+            </button>
+          </form>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/buddy.js"></script>
+</body>
+</html>

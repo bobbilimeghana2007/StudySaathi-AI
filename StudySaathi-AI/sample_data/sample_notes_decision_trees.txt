@@ -1,0 +1,33 @@
+# Lecture Notes: Decision Trees & Random Forests
+
+## 1. Introduction to Decision Trees
+A Decision Tree is a non-parametric supervised learning algorithm used for both classification and regression tasks. It utilizes a hierarchical tree structure consisting of a root node, internal decision nodes, branches, and leaf nodes.
+
+## 2. How Decision Trees Split Data
+At each node, the algorithm selects the feature that provides the purest split of target classes.
+The two most prominent purity metrics are:
+
+### A. Entropy and Information Gain (Used in ID3 & C4.5)
+- Entropy measures the degree of impurity or randomness in a dataset:
+  Entropy(S) = - sum(p_i * log2(p_i))
+- If a dataset is completely homogenous (all samples belong to one class), Entropy = 0.
+- If samples are split 50/50 between two classes, Entropy = 1.0 (maximum disorder).
+- Information Gain is the expected reduction in entropy achieved by partitioning on an attribute A:
+  Gain(S, A) = Entropy(S) - sum( (|S_v| / |S|) * Entropy(S_v) )
+
+### B. Gini Impurity (Used in CART)
+- Measures the likelihood that a randomly chosen element from the set would be incorrectly labeled:
+  Gini = 1 - sum(p_i^2)
+- Gini calculation is computationally faster because it avoids logarithmic computation.
+
+## 3. The Overfitting Dilemma & Pruning
+Because decision trees can split indefinitely until every training instance is uniquely isolated, deep trees frequently suffer from high variance (overfitting).
+To resolve this:
+1. **Pre-pruning (Early Stopping)**: Limit maximum tree depth (max_depth), set minimum samples per leaf (min_samples_leaf), or establish a minimum impurity decrease threshold.
+2. **Post-pruning (Cost Complexity Pruning)**: Allow the tree to grow fully, then eliminate sub-branches that contribute insignificantly to validation accuracy.
+
+## 4. Random Forests
+Random Forests solve individual tree instability by constructing an ensemble of decorrelated decision trees using:
+- **Bootstrap Aggregating (Bagging)**: Training each tree on a random sample of rows with replacement.
+- **Random Feature Subsets**: Considering only a random subset of features at each node split.
+- Final prediction: Majority voting for classification; mean average for regression.

@@ -1,0 +1,30 @@
+Machine Learning Semester Exam Syllabus
+Subject Code: CS601
+Target Exam: Final Semester Assessment
+
+Unit 1: Foundations of Machine Learning & Regression
+- Linear Regression, Cost Function (MSE), Gradient Descent Algorithm
+- Multiple Linear Regression and Feature Scaling
+- Logistic Regression, Sigmoid Function, Binary & Multiclass Classification
+
+Unit 2: Supervised Classification & Decision Models
+- Decision Trees: ID3, C4.5, CART Algorithms
+- Splitting Criteria: Entropy, Information Gain, Gini Impurity
+- Overfitting, Bias-Variance Tradeoff, Pre-pruning and Post-pruning
+- Random Forests and Ensemble Methods (Bagging and Boosting)
+
+Unit 3: Unsupervised Learning & Clustering
+- K-Means Clustering: Centroid initialization, Elbow Method
+- Hierarchical Clustering: Agglomerative vs Divisive, Dendrograms
+- Principal Component Analysis (PCA) for Dimensionality Reduction
+
+Unit 4: Deep Learning Foundations & Neural Networks
+- Artificial Neural Networks: Perceptron, Multilayer Perceptron (MLP)
+- Activation Functions: Sigmoid, Tanh, ReLU, Softmax
+- Forward Propagation, Backpropagation, and Loss Calculation
+- Regularization in Neural Networks: Dropout, L1/L2 Weight Decay
+
+Unit 5: Model Evaluation & Practical Deployment
+- Confusion Matrix, Precision, Recall, F1-Score, Specificity
+- ROC and AUC Curves
+- Cross-Validation techniques: K-Fold, Stratified K-Fold

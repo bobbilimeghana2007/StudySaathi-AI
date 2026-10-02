@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen Code Playground - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: calc(100vh - 190px);
+    }
+    .code-box {
+      width: 100%;
+      height: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      color: #e2e8f0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      padding: 16px;
+      resize: none;
+      outline: none;
+    }
+    .console-box {
+      width: 100%;
+      height: 100%;
+      background: #090d16;
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      color: #34d399;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      padding: 16px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h1>StudySaathi</h1>
+          <p>Local AI Companion</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner" class="nav-item">
+          <span class="icon">🗓️</span>
+          <span>Study Planner</span>
+        </a>
+        <a href="/buddy" class="nav-item">
+          <span class="icon">🤖</span>
+          <span>AI Study Buddy</span>
+        </a>
+        <a href="/quiz" class="nav-item">
+          <span class="icon">🧠</span>
+          <span>Adaptive Quiz</span>
+        </a>
+        <a href="/flashcards" class="nav-item">
+          <span class="icon">🃏</span>
+          <span>Flashcards Arena</span>
+        </a>
+        <a href="/code" class="nav-item active">
+          <span class="icon">💻</span>
+          <span>Screen Code</span>
+        </a>
+        <a href="/notes" class="nav-item">
+          <span class="icon">📄</span>
+          <span>Notes → Questions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <span id="ai-status-dot" class="status-dot"></span>
+            <span id="ai-status-text" style="font-weight:600;">Ollama Fast</span>
+          </span>
+          <span style="color:var(--text-dim); font-size:0.75rem;">100% Private</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="student-greeting">
+          <h2>💻 Screen Code Playground</h2>
+          <p>Live Code Sandbox for School & College Algorithms</p>
+        </div>
+        <div class="topbar-actions">
+          <select id="code-template-select" class="btn btn-secondary" style="font-size:0.8rem; padding:6px 12px; cursor:pointer;" onchange="loadSelectedTemplate()">
+            <option value="ml_regression">🧠 ML: Linear Regression (Python)</option>
+            <option value="ml_decision_tree">🌲 ML: Decision Tree Entropy</option>
+            <option value="dsa_binary_search">⚡ DSA: Binary Search (JS)</option>
+            <option value="math_quadratic">📐 Math: Quadratic Solver (Python)</option>
+            <option value="physics_newton">🚀 Physics: Newton F=ma (Python)</option>
+          </select>
+          <button class="btn btn-primary" onclick="runScreenCode()" style="padding:7px 18px;">
+            <span>Run Code ▶️</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <div class="editor-container">
+          <!-- CODE EDITOR -->
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                Interactive Code Editor:
+              </span>
+              <button class="btn btn-secondary" style="font-size: 0.72rem; padding: 3px 8px;" onclick="explainCodeWithAI()">
+                🤖 Explain Code with AI
+              </button>
+            </div>
+            <textarea id="code-editor" class="code-box" spellcheck="false"></textarea>
+          </div>
+
+          <!-- TERMINAL OUTPUT -->
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #34d399; text-transform: uppercase;">
+                Execution Output Console:
+              </span>
+              <button class="btn btn-secondary" style="font-size: 0.72rem; padding: 3px 8px;" onclick="clearConsole()">
+                Clear Console
+              </button>
+            </div>
+            <div id="console-output" class="console-box">Terminal ready. Click 'Run Code ▶️' to execute.</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/code.js"></script>
+</body>
+</html>

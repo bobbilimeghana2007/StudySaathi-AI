@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySaathi AI - Open-Source AI Study Companion</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .landing-hero {
+      max-width: 860px;
+      margin: 40px auto;
+      text-align: center;
+      padding: 20px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--border-highlight);
+      color: #c7d2fe;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .landing-hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .landing-hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .onboarding-card {
+      max-width: 540px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-control {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      color: white;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div style="width: 100%;">
+    <div class="landing-hero">
+      <div class="hero-badge">
+        <span>🚀 Hacktoberfest Project • Open-Source & 100% Private</span>
+      </div>
+      <h1>Turn Scattered Notes into a Personal Study System</h1>
+      <p>
+        Built specifically for real students overwhelmed by syllabus overload. 
+        Powered by local open-weight AI that runs on your laptop with zero cloud API costs and complete data privacy.
+      </p>
+
+      <div class="glass-card onboarding-card">
+        <h3 style="margin-bottom: 6px; font-size: 1.25rem;">👋 Welcome to StudySaathi</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+          Configure your study profile to generate your customized plan.
+        </p>
+
+        <form id="profile-form">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" id="name" class="form-control" value="Meghana" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Course / Degree</label>
+              <input type="text" id="course" class="form-control" value="B.Tech Computer Science" required>
+            </div>
+            <div class="form-group">
+              <label>Academic Year / Sem</label>
+              <input type="text" id="year" class="form-control" value="3rd Year / 5th Sem" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Exam Target Date</label>
+              <input type="date" id="exam_date" class="form-control" value="2026-10-28">
+            </div>
+            <div class="form-group">
+              <label>Target Percentage (%)</label>
+              <input type="number" id="target" class="form-control" value="88" min="50" max="100">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Daily Study Time (Hours)</label>
+            <input type="number" step="0.5" id="daily_hours" class="form-control" value="2.0" min="0.5" max="12">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 1rem; margin-top: 10px;">
+            🚀 Enter StudySaathi Dashboard
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    document.getElementById("profile-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("name").value,
+        course: document.getElementById("course").value,
+        year: document.getElementById("year").value,
+        exam_date: document.getElementById("exam_date").value,
+        target_percentage: parseInt(document.getElementById("target").value),
+        daily_study_hours: parseFloat(document.getElementById("daily_hours").value)
+      };
+
+      try {
+        await fetchAPI("/api/student", "POST", payload);
+        showToast("Profile configured successfully!", "success");
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 500);
+      } catch (err) {
+        showToast("Error updating profile", "error");
+      }
+    });
+  </script>
+</body>
+</html>

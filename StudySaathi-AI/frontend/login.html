@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login & Profile - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .login-container {
+      max-width: 640px;
+      margin: 36px auto;
+      padding: 20px;
+    }
+    .level-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .level-card {
+      border: 2px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
+    }
+    .level-card:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--primary);
+    }
+    .level-card.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.15));
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+    .level-card .icon {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+    .level-card .title {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .level-card .sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-control {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      color: white;
+      font-size: 0.92rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div style="text-align: center; margin-bottom: 26px;">
+      <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 20px var(--primary-glow);">
+          🎓
+        </div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(to right, #fff, #c7d2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          StudySaathi AI
+        </h1>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">
+        An Open-Source Study Companion Built for School & College Students
+      </p>
+    </div>
+
+    <div class="glass-card">
+      <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 6px;">Select Education Level</h3>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">
+        Select your level or use the 1-Click demo shortcuts below.
+      </p>
+
+      <div class="level-card-grid">
+        <div class="level-card" onclick="selectLevel('school', this)">
+          <div class="icon">🎒</div>
+          <div class="title">School Student</div>
+          <div class="sub">Classes 6th - 10th</div>
+        </div>
+
+        <div class="level-card" onclick="selectLevel('intermediate', this)">
+          <div class="icon">🔬</div>
+          <div class="title">Intermediate / +2</div>
+          <div class="sub">11th-12th / JEE / NEET</div>
+        </div>
+
+        <div class="level-card selected" onclick="selectLevel('college', this)">
+          <div class="icon">🏛️</div>
+          <div class="title">College / Degree</div>
+          <div class="sub">B.Tech / B.Sc / BCA</div>
+        </div>
+      </div>
+
+      <form id="login-form">
+        <input type="hidden" id="category-input" value="college">
+
+        <div class="form-group">
+          <label>Student Full Name</label>
+          <input type="text" id="name" class="form-control" value="Meghana" placeholder="e.g. Meghana, Rahul, Ananya" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label id="inst-label">College / University Name</label>
+            <input type="text" id="institution" class="form-control" value="State University of Technology" required>
+          </div>
+          <div class="form-group">
+            <label id="grade-label">Academic Year / Class</label>
+            <input type="text" id="grade" class="form-control" value="3rd Year / 5th Sem" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Roll Number / Student ID</label>
+            <input type="text" id="roll" class="form-control" value="22CS084" required>
+          </div>
+          <div class="form-group">
+            <label>Preferred AI Language</label>
+            <select id="language" class="form-control" style="cursor: pointer;">
+              <option value="en">English</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="hi">हिंदी (Hindi)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Daily Study Time (Hours)</label>
+            <input type="number" step="0.5" id="daily_hours" class="form-control" value="2.5" min="0.5" max="12">
+          </div>
+          <div class="form-group">
+            <label>Target Exam Score (%)</label>
+            <input type="number" id="target" class="form-control" value="88" min="40" max="100">
+          </div>
+        </div>
+
+        <button type="submit" id="submit-login-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 13px; font-size: 1rem; margin-top: 8px;">
+          🚀 Enter StudySaathi Hub
+        </button>
+      </form>
+
+      <!-- 1-CLICK DEMO SHORTCUT BUTTONS -->
+      <div style="display: flex; gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
+        <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 0.78rem; justify-content: center;" onclick="quickLoginSchool()">
+          🎒 1-Click School Demo
+        </button>
+        <button type="button" class="btn btn-secondary" style="flex: 1; font-size: 0.78rem; justify-content: center;" onclick="quickLoginCollege()">
+          🏛️ 1-Click B.Tech Demo
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    function selectLevel(cat, el) {
+      document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('category-input').value = cat;
+
+      const instLabel = document.getElementById('inst-label');
+      const gradeLabel = document.getElementById('grade-label');
+      
+      if (cat === 'school') {
+        instLabel.textContent = "School Name";
+        gradeLabel.textContent = "Class / Standard (e.g. 10th Class)";
+      } else if (cat === 'intermediate') {
+        instLabel.textContent = "Junior College / Coaching Institute";
+        gradeLabel.textContent = "Stream (MPC / BiPC / 12th)";
+      } else {
+        instLabel.textContent = "College / University Name";
+        gradeLabel.textContent = "Academic Year / Semester";
+      }
+    }
+
+    async function quickLoginCollege() {
+      selectLevel('college', document.querySelectorAll('.level-card')[2]);
+      document.getElementById('name').value = "Meghana";
+      document.getElementById('institution').value = "State University of Technology";
+      document.getElementById('grade').value = "3rd Year B.Tech CSE";
+      document.getElementById('roll').value = "22CS084";
+      document.getElementById('target').value = 88;
+      document.getElementById('daily_hours').value = 2.5;
+      
+      showToast("Logging in to B.Tech Demo... 🚀", "info");
+      await submitProfile();
+    }
+
+    async function quickLoginSchool() {
+      selectLevel('school', document.querySelectorAll('.level-card')[0]);
+      document.getElementById('name').value = "Aarav Sharma";
+      document.getElementById('institution').value = "Kendriya Vidyalaya / Model High School";
+      document.getElementById('grade').value = "Class 10th (CBSE / State)";
+      document.getElementById('roll').value = "KV-1042";
+      document.getElementById('target').value = 92;
+      document.getElementById('daily_hours').value = 2.0;
+
+      showToast("Logging in to School Demo... 🎒", "info");
+      await submitProfile();
+    }
+
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await submitProfile();
+    });
+
+    async function submitProfile() {
+      const btn = document.getElementById("submit-login-btn");
+      if (btn) btn.disabled = true;
+
+      const payload = {
+        name: document.getElementById("name").value.trim() || "Meghana",
+        category: document.getElementById("category-input").value || "college",
+        institution: document.getElementById("institution").value.trim() || "State University",
+        grade_or_year: document.getElementById("grade").value.trim() || "3rd Year",
+        roll_number: document.getElementById("roll").value.trim() || "22CS084",
+        preferred_language: document.getElementById("language").value || "en",
+        target_percentage: parseInt(document.getElementById("target").value) || 88,
+        daily_study_hours: parseFloat(document.getElementById("daily_hours").value) || 2.5
+      };
+
+      // Store in localStorage as instant fallback
+      localStorage.setItem("studysaathi_student", JSON.stringify(payload));
+      localStorage.setItem("studysaathi_lang", payload.preferred_language);
+
+      try {
+        await fetchAPI("/api/login", "POST", payload);
+      } catch (err) {
+        console.warn("Backend login synced locally:", err);
+      }
+
+      showToast("Welcome to StudySaathi Hub! 🎉", "success");
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 350);
+    }
+  </script>
+</body>
+</html>

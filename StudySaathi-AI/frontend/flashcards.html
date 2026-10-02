@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards Arena - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h1>StudySaathi</h1>
+          <p>Local AI Companion</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner" class="nav-item">
+          <span class="icon">🗓️</span>
+          <span>Study Planner</span>
+        </a>
+        <a href="/buddy" class="nav-item">
+          <span class="icon">🤖</span>
+          <span>AI Study Buddy</span>
+        </a>
+        <a href="/quiz" class="nav-item">
+          <span class="icon">🧠</span>
+          <span>Adaptive Quiz</span>
+        </a>
+        <a href="/flashcards" class="nav-item active">
+          <span class="icon">🃏</span>
+          <span>Flashcards Arena</span>
+        </a>
+        <a href="/code" class="nav-item">
+          <span class="icon">💻</span>
+          <span>Screen Code</span>
+        </a>
+        <a href="/notes" class="nav-item">
+          <span class="icon">📄</span>
+          <span>Notes → Questions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <span id="ai-status-dot" class="status-dot"></span>
+            <span id="ai-status-text" style="font-weight:600;">Ollama Fast</span>
+          </span>
+          <span style="color:var(--text-dim); font-size:0.75rem;">100% Private</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN FLASHCARDS CONTENT -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="student-greeting">
+          <h2>🃏 Flashcards Arena (Spaced Repetition)</h2>
+          <p>Click card to flip between Question and Answer. Boost long-term recall!</p>
+        </div>
+        <div class="topbar-actions">
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary active" onclick="filterCards('all', this)" id="btn-all" style="font-size:0.78rem; padding:5px 12px;">All</button>
+            <button class="btn btn-secondary" onclick="filterCards('college', this)" id="btn-college" style="font-size:0.78rem; padding:5px 12px;">🏛️ College</button>
+            <button class="btn btn-secondary" onclick="filterCards('school', this)" id="btn-school" style="font-size:0.78rem; padding:5px 12px;">🎒 School</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-body" style="max-width: 760px; margin: 0 auto; width: 100%;">
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <span id="card-counter" class="badge-streak" style="background:rgba(255,255,255,0.06); color:#fff;">
+            Card 1 of 8
+          </span>
+          <button class="btn btn-secondary" onclick="readFlashcardAloud()" style="font-size:0.78rem; padding:4px 10px;">
+            🔊 Read Question
+          </button>
+        </div>
+
+        <!-- 3D FLIP CARD -->
+        <div class="flashcard-wrapper" id="flashcard-card" onclick="flipCurrentCard()">
+          <div class="flashcard-inner">
+            <!-- FRONT -->
+            <div class="flashcard-front">
+              <span id="card-topic-badge" style="background:var(--primary); padding:3px 10px; border-radius:999px; font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-bottom:14px;">
+                Topic
+              </span>
+              <h3 id="card-front-text" style="font-size: 1.3rem; font-weight: 700; line-height: 1.5;">
+                Question loading...
+              </h3>
+              <div style="margin-top: 24px; font-size: 0.8rem; color: var(--text-muted);">
+                🔄 Click anywhere to flip & reveal answer
+              </div>
+            </div>
+
+            <!-- BACK -->
+            <div class="flashcard-back">
+              <span style="background:rgba(0,0,0,0.25); padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; margin-bottom:12px;">
+                💡 RECALL ANSWER
+              </span>
+              <p id="card-back-text" style="font-size: 1.15rem; line-height: 1.6; font-weight: 500;">
+                Answer loading...
+              </p>
+              <div id="card-hint-text" style="margin-top: 14px; font-size: 0.82rem; color: #fde047; font-style: italic;">
+                Hint: ...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+          <button class="btn btn-secondary" onclick="prevCard()" style="padding: 10px 20px;">
+            ← Previous
+          </button>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-secondary" style="border-color:var(--danger); color:#f87171;" onclick="markMastery(false)">
+              ⚠️ Needs Practice
+            </button>
+            <button class="btn btn-primary" style="background:var(--success);" onclick="markMastery(true)">
+              ✅ Mastered
+            </button>
+          </div>
+
+          <button class="btn btn-secondary" onclick="nextCard()" style="padding: 10px 20px;">
+            Next →
+          </button>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/flashcards.js"></script>
+</body>
+</html>

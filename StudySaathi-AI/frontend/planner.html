@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Study Planner - StudySaathi AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <div class="brand-text">
+          <h1>StudySaathi</h1>
+          <p>Local AI Companion</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-item">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="/planner" class="nav-item active">
+          <span class="icon">🗓️</span>
+          <span>Study Planner</span>
+        </a>
+        <a href="/buddy" class="nav-item">
+          <span class="icon">🤖</span>
+          <span>AI Study Buddy</span>
+        </a>
+        <a href="/quiz" class="nav-item">
+          <span class="icon">🧠</span>
+          <span>Adaptive Quiz</span>
+        </a>
+        <a href="/flashcards" class="nav-item">
+          <span class="icon">🃏</span>
+          <span>Flashcards Arena</span>
+        </a>
+        <a href="/code" class="nav-item">
+          <span class="icon">💻</span>
+          <span>Screen Code</span>
+        </a>
+        <a href="/notes" class="nav-item">
+          <span class="icon">📄</span>
+          <span>Notes → Questions</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <span id="ai-status-dot" class="status-dot"></span>
+            <span id="ai-status-text" style="font-weight:600;">Ollama Fast</span>
+          </span>
+          <span style="color:var(--text-dim); font-size:0.75rem;">100% Private</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN PLANNER CONTENT -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="student-greeting">
+          <h2>🗓️ Smart Study Planner</h2>
+          <p>AI distributes your topics into balanced Learn, Practice, Quiz & Revision blocks</p>
+        </div>
+        <div class="topbar-actions" style="display:flex; gap:8px;">
+          <button id="load-college-btn" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 10px;">
+            🏛️ Load College Syllabus
+          </button>
+          <button id="load-school-btn" class="btn btn-secondary" style="font-size: 0.78rem; padding: 6px 10px;">
+            🎒 Load School Syllabus
+          </button>
+        </div>
+      </header>
+
+      <main class="content-body">
+        <div style="display: grid; grid-template-columns: 380px 1fr; gap: 28px;">
+          
+          <!-- PLAN GENERATION FORM -->
+          <div class="glass-card" style="height: fit-content;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 6px;">Create New Plan</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">
+              Input your syllabus topics and daily study time.
+            </p>
+
+            <form id="plan-form">
+              <div style="margin-bottom: 16px;">
+                <label style="display:block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
+                  SUBJECT NAME
+                </label>
+                <input type="text" id="subject-name" class="chat-input" value="Machine Learning & Science" style="width: 100%;" required>
+              </div>
+
+              <div style="margin-bottom: 16px;">
+                <label style="display:block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
+                  SYLLABUS TOPICS (NEW LINES)
+                </label>
+                <textarea id="topics-input" class="chat-input" rows="6" style="width: 100%; resize: vertical;" required>Linear & Logistic Regression
+Classification & Evaluation Metrics
+Decision Trees & Random Forests
+Photosynthesis & Cellular Respiration
+Newton's Three Laws of Motion
+Quadratic Equations & Discriminant</textarea>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                <div>
+                  <label style="display:block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
+                    DAYS LEFT
+                  </label>
+                  <input type="number" id="days-input" class="chat-input" value="6" min="1" max="90" style="width: 100%;">
+                </div>
+                <div>
+                  <label style="display:block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
+                    HOURS / DAY
+                  </label>
+                  <input type="number" step="0.5" id="hours-input" class="chat-input" value="2.5" min="0.5" max="12" style="width: 100%;">
+                </div>
+              </div>
+
+              <button type="submit" id="generate-plan-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
+                <span>✨ Generate Study Plan</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- SCHEDULE DISPLAY -->
+          <div>
+            <div class="glass-card" style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h3 id="plan-title" style="font-size: 1.2rem; font-weight: 700;">Active Curriculum Schedule</h3>
+                  <p id="plan-subtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                    Pedagogical ratio: 40% Learn • 30% Practice • 15% Quiz • 15% Revision
+                  </p>
+                </div>
+                <div id="plan-progress-pill" class="badge-streak" style="background: rgba(99, 102, 241, 0.15); border-color: var(--primary); color: #c7d2fe;">
+                  <span>0 / 6 Days Done</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="plan-timeline" style="display: flex; flex-direction: column; gap: 14px;">
+              <!-- Timeline items rendered dynamically -->
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/planner.js"></script>
+</body>
+</html>
